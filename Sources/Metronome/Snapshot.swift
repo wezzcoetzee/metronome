@@ -2,12 +2,12 @@ import AppKit
 import MetronomeCore
 import SwiftUI
 
-/// Dev tool: `METRONOME_SNAPSHOT=/some/dir .build/debug/Metronome` renders every popover layout
-/// and the settings page to PNGs, then quits. Useful when the menu bar item is hidden or out of reach.
+/// Dev tool: `METRONOME_SNAPSHOT=/some/dir .build/debug/Metronome` renders every layout
+/// and the settings page to PNGs, then quits.
 enum Snapshot {
     @MainActor static func renderIfRequested(_ store: MetronomeStore) {
         guard let directory = ProcessInfo.processInfo.environment["METRONOME_SNAPSHOT"] else { return }
-        var views = PopoverLayout.allCases.map { ($0.rawValue, AnyView(PopoverView(forcedLayout: $0))) }
+        var views = MetronomeLayout.allCases.map { ($0.rawValue, AnyView(MetronomeView(forcedLayout: $0))) }
         views.append(("settings", AnyView(SettingsView())))
 
         for (name, view) in views {

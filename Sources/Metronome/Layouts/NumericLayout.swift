@@ -1,7 +1,7 @@
 import MetronomeCore
 import SwiftUI
 
-/// Dense, keyboard-first layout. Shortcut hints mirror the handlers in `PopoverView`.
+/// Dense, keyboard-first layout. Shortcut hints mirror the handlers in `MetronomeView`.
 struct NumericLayout: View {
     @Environment(MetronomeStore.self) private var store
 
