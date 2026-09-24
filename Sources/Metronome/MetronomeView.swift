@@ -1,12 +1,12 @@
 import MetronomeCore
 import SwiftUI
 
-struct PopoverView: View {
+struct MetronomeView: View {
     @Environment(MetronomeStore.self) private var store
     @Environment(\.openSettings) private var openSettings
     @FocusState private var focused: Bool
     /// Overrides the saved layout; used by `Snapshot`.
-    var forcedLayout: PopoverLayout?
+    var forcedLayout: MetronomeLayout?
 
     var body: some View {
         VStack(spacing: 12) {
@@ -21,21 +21,14 @@ struct PopoverView: View {
             HStack {
                 Button("Save preset") { store.saveCurrentAsPreset() }
                 Spacer()
-                Button("Settings") {
-                    // Menu bar apps can't bring windows forward; act as a regular app while Settings is open.
-                    NSApp.setActivationPolicy(.regular)
-                    NSApp.activate()
-                    openSettings()
-                }
-                .keyboardShortcut(",")
-                Button("Quit") { NSApp.terminate(nil) }
-                    .keyboardShortcut("q")
+                Button("Settings") { openSettings() }
             }
             .buttonStyle(.plain)
             .foregroundStyle(Color.dim)
         }
         .padding(14)
         .frame(width: 300)
+        .fixedSize()
         .background(.black)
         .foregroundStyle(.white)
         .focusable()

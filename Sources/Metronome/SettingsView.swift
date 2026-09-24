@@ -11,8 +11,7 @@ struct SettingsView: View {
     var body: some View {
         let settings = store.settings
         VStack(alignment: .leading, spacing: 0) {
-            row("Layout") { segmented(\.layout, PopoverLayout.allCases, label: \.name) }
-            row("Menu bar") { segmented(\.menuBarStyle, MenuBarStyle.allCases, label: \.name) }
+            row("Layout") { segmented(\.layout, MetronomeLayout.allCases, label: \.name) }
             row("Sound") {
                 HStack {
                     segmented(\.sound, Sound.allCases, label: \.name)
@@ -57,7 +56,6 @@ struct SettingsView: View {
         .background(.black)
         .foregroundStyle(.white)
         .preferredColorScheme(.dark)
-        .onDisappear { NSApp.setActivationPolicy(.accessory) }
     }
 
     private func presets(_ settings: MetronomeSettings) -> some View {

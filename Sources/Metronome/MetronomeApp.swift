@@ -11,30 +11,13 @@ struct MetronomeApp: App {
     }
 
     var body: some Scene {
-        MenuBarExtra {
-            PopoverView().environment(store)
-        } label: {
-            Text(menuBarTitle).monospacedDigit()
+        Window("Metronome", id: "main") {
+            MetronomeView().environment(store)
         }
-        .menuBarExtraStyle(.window)
+        .windowResizability(.contentSize)
 
         Settings {
             SettingsView().environment(store)
-        }
-    }
-
-    private var menuBarTitle: String {
-        let bpm = store.settings.bpm
-        switch store.settings.menuBarStyle {
-        case .note:
-            return "♩ \(bpm)"
-        case .number:
-            return "\(bpm)"
-        case .playState:
-            return "\(store.isPlaying ? "▶" : "■") \(bpm)"
-        case .beats:
-            let dots = store.settings.accents.indices.map { $0 == store.currentBeat ? "●" : "○" }
-            return "\(dots.joined(separator: " ")) \(bpm)"
         }
     }
 }

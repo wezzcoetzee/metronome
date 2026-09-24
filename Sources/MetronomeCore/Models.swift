@@ -68,7 +68,7 @@ public enum Subdivision: Int, Codable, CaseIterable, Identifiable, Sendable {
     }
 }
 
-public enum PopoverLayout: String, Codable, CaseIterable, Identifiable, Sendable {
+public enum MetronomeLayout: String, Codable, CaseIterable, Identifiable, Sendable {
     case dial, numeric, grid, ruler
 
     public var id: Self { self }
@@ -79,21 +79,6 @@ public enum PopoverLayout: String, Codable, CaseIterable, Identifiable, Sendable
         case .numeric: "Numeric"
         case .grid: "Grid"
         case .ruler: "Ruler"
-        }
-    }
-}
-
-public enum MenuBarStyle: String, Codable, CaseIterable, Identifiable, Sendable {
-    case note, number, beats, playState
-
-    public var id: Self { self }
-
-    public var name: String {
-        switch self {
-        case .note: "♩ 120"
-        case .number: "120"
-        case .beats: "● ○ ○ 120"
-        case .playState: "▶ 120"
         }
     }
 }
@@ -122,8 +107,7 @@ public struct MetronomeSettings: Codable, Equatable, Sendable {
     public var sound = Sound.woodblock
     public var subdivision = Subdivision.quarter
     public var volume = 0.8
-    public var layout = PopoverLayout.numeric
-    public var menuBarStyle = MenuBarStyle.note
+    public var layout = MetronomeLayout.numeric
     public var presets = [
         Preset(name: "Warmup", bpm: 80),
         Preset(name: "Groove", bpm: 120, sound: .woodblock),
@@ -146,7 +130,6 @@ public struct MetronomeSettings: Codable, Equatable, Sendable {
         subdivision = value(.subdivision, defaults.subdivision)
         volume = value(.volume, defaults.volume)
         layout = value(.layout, defaults.layout)
-        menuBarStyle = value(.menuBarStyle, defaults.menuBarStyle)
         presets = value(.presets, defaults.presets)
     }
 
