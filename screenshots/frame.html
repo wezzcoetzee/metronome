@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  html { background: {{BG2}}; }
+  body {
+    background: linear-gradient(165deg, {{BG1}} 0%, {{BG2}} 100%);
+    color: {{TEXT}};
+    font-family: -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .copy { text-align: center; }
+  h1 { font-weight: 800; letter-spacing: -0.02em; line-height: 1.08; }
+  h2 { font-weight: 500; opacity: 0.75; line-height: 1.25; }
+  .device { position: relative; }
+  .device img { display: block; width: 100%; }
+
+  body.iphone .copy, body.ipad .copy { padding: 7vw 8vw 0; }
+  body.iphone h1, body.ipad h1 { font-size: 6.8vw; }
+  body.iphone h2, body.ipad h2 { font-size: 3.4vw; margin-top: 2vw; }
+
+  body.iphone .device {
+    margin-top: 5.5vw;
+    width: 78vw;
+    padding: 2.1vw;
+    background: #181a1c;
+    border-radius: 12.5vw;
+    box-shadow: 0 3vw 10vw rgba(0, 0, 0, 0.5);
+  }
+  body.iphone .device img { border-radius: 10.4vw; }
+  body.iphone .device::after {
+    content: "";
+    position: absolute;
+    top: 3.9vw;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20.5vw;
+    height: 6vw;
+    background: #000;
+    border-radius: 3vw;
+  }
+
+  body.ipad .device {
+    margin-top: 5.5vw;
+    width: 80vw;
+    padding: 2.6vw;
+    background: #181a1c;
+    border-radius: 5.5vw;
+    box-shadow: 0 3vw 10vw rgba(0, 0, 0, 0.5);
+  }
+  body.ipad .device img { border-radius: 2.9vw; }
+
+  body.mac .copy { padding: 4.5vw 10vw 0; }
+  body.mac h1 { font-size: 4.2vw; }
+  body.mac h2 { font-size: 2vw; margin-top: 1.2vw; }
+  body.mac .device { flex: 1; min-height: 0; margin: 3vw 0 4.5vw; display: flex; }
+  body.mac .device img {
+    height: 100%; width: auto; border-radius: 1vw;
+    border: 0.08vw solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 2vw 5vw rgba(0, 0, 0, 0.7);
+  }
+</style>
+</head>
+<body class="{{FRAME_CLASS}}">
+  <div class="copy">
+    <h1>{{HEADLINE}}</h1>
+    <h2>{{SUBHEADLINE}}</h2>
+  </div>
+  <div class="device"><img src="shot.png" alt=""></div>
+</body>
+</html>
