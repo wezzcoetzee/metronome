@@ -2,6 +2,12 @@
 
 Metronome is a macOS 14+ windowed app with tap tempo, presets, time signatures, per-beat accents, subdivisions, and five synthesised sounds. Choose between Dial, Numeric, Grid, and Ruler layouts in Settings.
 
+<img src="screenshots/framed/mac/1-dial.png" width="49%">
+<img src="screenshots/framed/mac/2-numeric.png" width="49%">
+<img src="screenshots/framed/mac/3-grid.png" width="49%">
+<img src="screenshots/framed/mac/4-ruler.png" width="49%">
+<img src="screenshots/framed/mac/5-settings.png" width="49%">
+
 ## Build and run
 
 Requires macOS 14+ and Xcode with Swift 6. If `xcode-select -p` points to Command Line Tools, select Xcode for this shell first (adjust the path if needed):
@@ -43,6 +49,8 @@ swift build
 mkdir -p /tmp/metronome-snapshots
 METRONOME_SNAPSHOT=/tmp/metronome-snapshots .build/debug/Metronome
 ```
+
+App Store images live in `screenshots/`: `raw/mac` holds those snapshots and `framed/mac` holds 2880×1800 marketing frames rendered from `screenshots/frame.html`.
 
 ## Layout
 
