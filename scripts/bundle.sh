@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Builds a release binary and wraps it in a menu-bar-only .app bundle.
+# Builds a release binary and wraps it in a versioned .app bundle.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+
+version="${1:?Usage: $0 VERSION}"
 
 swift build -c release
 app="build/Metronome.app"
@@ -18,8 +20,8 @@ cat > "$app/Contents/Info.plist" <<PLIST
   <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>CFBundleName</key><string>Metronome</string>
   <key>CFBundlePackageType</key><string>APPL</string>
-  <key>CFBundleShortVersionString</key><string>1.0</string>
-  <key>CFBundleVersion</key><string>1</string>
+  <key>CFBundleShortVersionString</key><string>$version</string>
+  <key>CFBundleVersion</key><string>$version</string>
   <key>LSMinimumSystemVersion</key><string>14.0</string>
 </dict></plist>
 PLIST

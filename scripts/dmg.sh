@@ -3,7 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-scripts/bundle.sh
+scripts/bundle.sh "${1:?Usage: $0 VERSION}"
 stage="build/dmg"
 dmg="build/Metronome.dmg"
 rm -rf "$stage" "$dmg"

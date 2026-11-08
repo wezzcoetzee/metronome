@@ -17,11 +17,15 @@ export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 ```
 
 ```sh
-./scripts/bundle.sh
+./scripts/bundle.sh 1.0.0
 open build/Metronome.app
 ```
 
-To make a drag-to-Applications disk image, run `./scripts/dmg.sh`. It rebuilds the app and writes `build/Metronome.dmg`.
+To make a drag-to-Applications disk image, run `./scripts/dmg.sh 1.0.0`. Both scripts require a version argument and embed it in the app bundle. The DMG script rebuilds the app and writes `build/Metronome.dmg`.
+
+## Releases
+
+Push a version tag such as `v1.0.0` to build the app and publish `Metronome.dmg` in a GitHub release using the [shared macOS release workflow](https://github.com/wezzcoetzee/.github/blob/main/.github/workflows/macos-release.yml). The tag without its leading `v` supplies both bundle version fields. You can also run the macOS Release workflow manually against an existing tag. The app uses ad hoc signing and is not notarized.
 
 ## Use
 
