@@ -20,6 +20,8 @@ struct MetronomeView: View {
             Divider()
             HStack {
                 Button("Save preset") { store.saveCurrentAsPreset() }
+                    .help(store.settings.isSavedAsPreset ? "Already saved" : "S")
+                    .disabled(store.settings.isSavedAsPreset)
                 Spacer()
                 Button("Settings") { openSettings() }
             }
@@ -31,10 +33,13 @@ struct MetronomeView: View {
         .fixedSize()
         .background(.black)
         .foregroundStyle(.white)
+        .preferredColorScheme(.dark)
         .focusable()
         .focusEffectDisabled()
         .focused($focused)
         .onAppear { focused = true }
+        // Closing the window shouldn't leave clicks running with no visible way to stop them.
+        .onDisappear { if store.isPlaying { store.toggle() } }
         .onKeyPress(phases: .down, action: handleKey)
     }
 

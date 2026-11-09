@@ -17,18 +17,23 @@ struct DialLayout: View {
         let settings = store.settings
         VStack(spacing: 12) {
             ZStack {
-                ring(to: 1, color: .hairline)
+                ring(to: 1, color: .outline)
                 ring(to: fraction, color: .white)
                 knob
                 VStack(spacing: 2) {
                     BPMText(bpm: settings.bpm, size: 46)
-                    Text("BPM · \(settings.timeSignature.description) · \(settings.sound.name)").font(.caption).foregroundStyle(Color.dim)
+                    Text("BPM · \(settings.meter) · \(settings.sound.name)").font(.caption).foregroundStyle(Color.dim)
                 }
             }
             .frame(width: diameter, height: diameter)
             .contentShape(Circle())
-            .gesture(DragGesture(minimumDistance: 0).onChanged { setBPM(at: $0.location) })
+            .gesture(DragGesture(minimumDistance: 0).onChanged { drag in
+                // Only drags that start on the ring set tempo, so clicking the readout is harmless.
+                guard isOnRing(drag.startLocation) else { return }
+                setBPM(at: drag.location)
+            })
             .overlay(ScrollSteps { store.nudge($0) })
+            .tempoAccessibility(store)
 
             BeatDots()
             HStack(spacing: 8) {
@@ -60,11 +65,21 @@ struct DialLayout: View {
             .offset(x: radius * cos(angle), y: radius * sin(angle))
     }
 
-    private func setBPM(at point: CGPoint) {
+    /// True on the arc itself: not the readout in the middle, and not the gap at the bottom.
+    private func isOnRing(_ point: CGPoint) -> Bool {
+        hypot(point.x - diameter / 2, point.y - diameter / 2) > diameter / 2 - 28 && angle(of: point) <= Self.sweep
+    }
+
+    /// Degrees clockwise from the start of the arc, 0 to 360.
+    private func angle(of point: CGPoint) -> Double {
         let degrees = atan2(point.y - diameter / 2, point.x - diameter / 2) * 180 / .pi
-        var relative = (degrees - Self.startAngle).truncatingRemainder(dividingBy: 360)
-        if relative < 0 { relative += 360 }
-        // The dead zone at the bottom snaps to whichever end is closer.
+        let relative = (degrees - Self.startAngle).truncatingRemainder(dividingBy: 360)
+        return relative < 0 ? relative + 360 : relative
+    }
+
+    private func setBPM(at point: CGPoint) {
+        var relative = angle(of: point)
+        // A drag that wanders into the bottom gap snaps to whichever end is closer.
         if relative > Self.sweep { relative = relative > (360 + Self.sweep) / 2 ? 0 : Self.sweep }
         let span = Double(Tempo.range.count - 1)
         store.setBPM(Tempo.range.lowerBound + Int((relative / Self.sweep * span).rounded()))

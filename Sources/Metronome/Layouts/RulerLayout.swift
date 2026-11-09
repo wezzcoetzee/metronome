@@ -1,7 +1,7 @@
 import MetronomeCore
 import SwiftUI
 
-/// A tempo scale you scrub horizontally. Presets show as marks on the scale.
+/// A tempo scale you scrub horizontally.
 struct RulerLayout: View {
     @Environment(MetronomeStore.self) private var store
     @State private var dragStartBPM: Int?
@@ -14,7 +14,7 @@ struct RulerLayout: View {
             HStack(alignment: .firstTextBaseline) {
                 BPMText(bpm: settings.bpm, size: 40)
                 Spacer()
-                Text("\(Tempo.marking(for: settings.bpm)) · \(settings.timeSignature.description)").foregroundStyle(Color.dim)
+                Text("\(Tempo.marking(for: settings.bpm)) · \(settings.meter) · \(settings.sound.name)").foregroundStyle(Color.dim)
             }
 
             ruler
@@ -28,6 +28,7 @@ struct RulerLayout: View {
                     }
                     .onEnded { _ in dragStartBPM = nil })
                 .overlay(ScrollSteps { store.nudge($0) })
+                .tempoAccessibility(store)
 
             BeatDots()
             HStack(spacing: 6) {
@@ -41,7 +42,6 @@ struct RulerLayout: View {
 
     private var ruler: some View {
         let bpm = store.settings.bpm
-        let presetBPMs = Set(store.settings.presets.map(\.bpm))
         return Canvas { context, size in
             let mid = size.width / 2
             let halfSpan = Int(mid / pointsPerBPM) + 1
@@ -51,9 +51,6 @@ struct RulerLayout: View {
                 context.fill(Path(CGRect(x: x - 0.5, y: 34 - height, width: 1, height: height)), with: .color(.outline))
                 if value % 10 == 0 {
                     context.draw(Text("\(value)").font(.system(size: 9, design: .monospaced)).foregroundStyle(Color.dim), at: CGPoint(x: x, y: 44))
-                }
-                if presetBPMs.contains(value) {
-                    context.fill(Path(CGRect(x: x - 3, y: 2, width: 6, height: 6)), with: .color(.white))
                 }
             }
             context.fill(Path(CGRect(x: mid - 1, y: 8, width: 2, height: 30)), with: .color(.white))

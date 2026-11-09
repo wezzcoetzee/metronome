@@ -29,7 +29,7 @@ Push a version tag such as `v1.0.0` to build the app and publish `Metronome.dmg`
 
 ## Use
 
-Start and stop playback in the main window. Use Tap to set the tempo, and open Settings to change the layout, sound, time signature, accents, subdivision, volume, and launch-at-login preference. Settings also lets you add, edit, remove, and reorder presets. Tempo is limited to 30–300 BPM; settings and presets persist between launches.
+Start and stop playback in the main window. Use Tap to set the tempo, click a beat to toggle its accent, and click a preset to load it. The main window lists the first nine presets, numbered to match their shortcuts. Open Settings to change the layout, sound, time signature, accents, subdivision, volume, and launch-at-login preference. Settings also lets you add, edit, reorder, and remove presets; Delete removes the selected preset, and ⌘Z undoes a removal or reorder. Tempo is limited to 30–300 BPM; settings and presets persist between launches.
 
 With the main window focused:
 
@@ -37,7 +37,7 @@ With the main window focused:
 | --- | --- |
 | Space | Start or stop |
 | T | Tap tempo |
-| S | Save the current tempo, time signature, and sound as a preset |
+| S | Save the current tempo, time signature, subdivision, and sound as a preset (skipped when a preset already matches) |
 | 1–9 | Load a preset by its position |
 | ↑ or → / ↓ or ← | Increase / decrease tempo by 1 BPM |
 | Shift + arrow | Increase / decrease tempo by 5 BPM |

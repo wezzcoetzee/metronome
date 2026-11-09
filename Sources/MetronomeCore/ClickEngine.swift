@@ -37,7 +37,7 @@ public final class ClickEngine: @unchecked Sendable {
 
         public init(_ settings: MetronomeSettings) {
             bpm = settings.bpm
-            accents = settings.accents
+            accents = settings.barAccents
             subdivision = settings.subdivision
             volume = settings.volume
             sound = settings.sound

@@ -81,12 +81,21 @@ public final class MetronomeStore {
             $0.bpm = preset.bpm
             $0.timeSignature = preset.timeSignature
             $0.sound = preset.sound
+            $0.subdivision = preset.subdivision
         }
     }
 
+    /// Does nothing when an existing preset already matches, so repeated saves never stack duplicates.
     public func saveCurrentAsPreset() {
         update {
-            $0.presets.append(Preset(name: "\($0.bpm) BPM", bpm: $0.bpm, timeSignature: $0.timeSignature, sound: $0.sound))
+            guard !$0.isSavedAsPreset else { return }
+            $0.presets.append(Preset(
+                name: "\($0.sound.name) \($0.meter)",
+                bpm: $0.bpm,
+                timeSignature: $0.timeSignature,
+                sound: $0.sound,
+                subdivision: $0.subdivision
+            ))
         }
     }
 

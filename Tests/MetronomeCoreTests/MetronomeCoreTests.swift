@@ -55,11 +55,23 @@ import Testing
         settings.timeSignature.beats = 6
         settings.normalize()
         #expect(settings.bpm == 300)
-        #expect(settings.accents == [true, false, false, false, false, false])
+        #expect(settings.barAccents == [true, false, false, false, false, false])
 
         settings.timeSignature.beats = 2
         settings.normalize()
-        #expect(settings.accents == [true, false])
+        #expect(settings.barAccents == [true, false])
+    }
+
+    @Test func shrinkingTheBarKeepsAccentsForLater() {
+        var settings = MetronomeSettings()
+        settings.accents[3] = true
+        settings.timeSignature.beats = 3
+        settings.normalize()
+        #expect(settings.barAccents == [true, false, false])
+
+        settings.timeSignature.beats = 4
+        settings.normalize()
+        #expect(settings.barAccents == [true, false, false, true])
     }
 
     @Test func decodingOlderDataKeepsPresetsAndDefaultsTheRest() throws {
@@ -67,6 +79,19 @@ import Testing
         let settings = try JSONDecoder().decode(MetronomeSettings.self, from: Data(json.utf8))
         #expect(settings.bpm == 90)
         #expect(settings.presets.map(\.name) == ["Slow"])
+        #expect(settings.presets.first?.subdivision == .quarter)
+        #expect(settings.barAccents.count == 4)
         #expect(settings.layout == MetronomeSettings().layout)
+    }
+}
+
+@MainActor @Suite struct StoreTests {
+    @Test func savingAMatchingPresetDoesNotDuplicate() {
+        let store = MetronomeStore(defaults: UserDefaults(suiteName: UUID().uuidString)!)
+        store.setBPM(97)
+        let count = store.settings.presets.count
+        store.saveCurrentAsPreset()
+        store.saveCurrentAsPreset()
+        #expect(store.settings.presets.count == count + 1)
     }
 }

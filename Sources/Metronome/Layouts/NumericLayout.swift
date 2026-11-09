@@ -12,7 +12,7 @@ struct NumericLayout: View {
                 BPMText(bpm: settings.bpm, size: 64)
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text(settings.timeSignature.description)
+                    Text(settings.meter)
                     Text(settings.sound.name)
                 }
                 .monospaced()
@@ -22,8 +22,11 @@ struct NumericLayout: View {
             Slider(
                 value: Binding(get: { Double(settings.bpm) }, set: { store.setBPM(Int($0.rounded())) }),
                 in: Double(Tempo.range.lowerBound)...Double(Tempo.range.upperBound)
-            )
+            ) { Text("Tempo") }
+            .labelsHidden()
             .tint(.white)
+
+            BeatDots()
 
             HStack(spacing: 6) {
                 ForEach([-5, -1, 1, 5], id: \.self) { delta in
@@ -36,22 +39,7 @@ struct NumericLayout: View {
             }
 
             Divider()
-            VStack(spacing: 0) {
-                ForEach(Array(settings.presets.prefix(9).enumerated()), id: \.element.id) { index, preset in
-                    let active = settings.matches(preset)
-                    HStack {
-                        Text("\(index + 1)").foregroundStyle(Color.dim).frame(width: 16, alignment: .leading)
-                        Text(preset.name)
-                        Spacer()
-                        Text("\(preset.bpm)")
-                    }
-                    .fontWeight(active ? .semibold : .regular)
-                    .padding(.vertical, 4)
-                    .contentShape(Rectangle())
-                    .onTapGesture { store.apply(preset) }
-                }
-            }
-            .monospaced()
+            PresetList()
         }
     }
 }

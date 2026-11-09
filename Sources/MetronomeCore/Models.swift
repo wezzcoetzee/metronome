@@ -66,6 +66,20 @@ public enum Subdivision: Int, Codable, CaseIterable, Identifiable, Sendable {
         case .sixteenth: "♬♬"
         }
     }
+
+    /// The time signature, plus this subdivision's symbol when it isn't plain quarter notes.
+    public func meter(_ signature: TimeSignature) -> String {
+        self == .quarter ? signature.description : "\(signature.description) \(symbol)"
+    }
+
+    public var name: String {
+        switch self {
+        case .quarter: "Quarter notes"
+        case .eighth: "Eighth notes"
+        case .triplet: "Triplets"
+        case .sixteenth: "Sixteenth notes"
+        }
+    }
 }
 
 public enum MetronomeLayout: String, Codable, CaseIterable, Identifiable, Sendable {
@@ -89,12 +103,38 @@ public struct Preset: Codable, Identifiable, Hashable, Sendable {
     public var bpm: Int
     public var timeSignature: TimeSignature
     public var sound: Sound
+    public var subdivision: Subdivision
 
-    public init(name: String, bpm: Int, timeSignature: TimeSignature = .common, sound: Sound = .click) {
+    public init(
+        name: String,
+        bpm: Int,
+        timeSignature: TimeSignature = .common,
+        sound: Sound = .click,
+        subdivision: Subdivision = .quarter
+    ) {
         self.name = name
         self.bpm = bpm
         self.timeSignature = timeSignature
         self.sound = sound
+        self.subdivision = subdivision
+    }
+
+    /// Presets saved before subdivision existed load as quarter notes.
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        bpm = try container.decode(Int.self, forKey: .bpm)
+        timeSignature = try container.decode(TimeSignature.self, forKey: .timeSignature)
+        sound = try container.decode(Sound.self, forKey: .sound)
+        subdivision = try container.decodeIfPresent(Subdivision.self, forKey: .subdivision) ?? .quarter
+    }
+
+    public var meter: String { subdivision.meter(timeSignature) }
+
+    /// The name, or the tempo when the name has been cleared.
+    public var displayName: String {
+        name.trimmingCharacters(in: .whitespaces).isEmpty ? "\(bpm) BPM" : name
     }
 }
 
@@ -102,8 +142,9 @@ public struct Preset: Codable, Identifiable, Hashable, Sendable {
 public struct MetronomeSettings: Codable, Equatable, Sendable {
     public var bpm = 120
     public var timeSignature = TimeSignature.common
-    /// One entry per beat in the bar; `true` plays the accent voice.
-    public var accents = [true, false, false, false]
+    /// Accent pattern for the longest possible bar; `true` plays the accent voice. Beats past the
+    /// current bar are kept, so shrinking the bar and growing it back restores their accents.
+    public var accents = [true] + Array(repeating: false, count: TimeSignature.beatRange.upperBound - 1)
     public var sound = Sound.woodblock
     public var subdivision = Subdivision.quarter
     public var volume = 0.8
@@ -138,18 +179,25 @@ public struct MetronomeSettings: Codable, Equatable, Sendable {
         bpm = Tempo.clamp(bpm)
         timeSignature.beats = min(max(timeSignature.beats, TimeSignature.beatRange.lowerBound), TimeSignature.beatRange.upperBound)
         volume = min(max(volume, 0), 1)
-        let beats = timeSignature.beats
-        if accents.count > beats {
-            accents.removeLast(accents.count - beats)
-        } else if accents.count < beats {
-            accents += Array(repeating: false, count: beats - accents.count)
-        }
+        let maxBeats = TimeSignature.beatRange.upperBound
+        accents = Array((accents + Array(repeating: false, count: maxBeats)).prefix(maxBeats))
         for index in presets.indices {
             presets[index].bpm = Tempo.clamp(presets[index].bpm)
         }
     }
 
-    public func matches(_ preset: Preset) -> Bool {
-        preset.bpm == bpm && preset.timeSignature == timeSignature && preset.sound == sound
+    /// One entry per beat in the current bar.
+    public var barAccents: [Bool] {
+        Array(accents.prefix(timeSignature.beats))
     }
+
+    public func matches(_ preset: Preset) -> Bool {
+        preset.bpm == bpm && preset.timeSignature == timeSignature && preset.sound == sound && preset.subdivision == subdivision
+    }
+
+    public var isSavedAsPreset: Bool {
+        presets.contains(where: matches)
+    }
+
+    public var meter: String { subdivision.meter(timeSignature) }
 }
