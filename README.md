@@ -26,6 +26,16 @@
 - Presets with keyboard shortcuts, reordering, and undo
 - Launch at login; settings and presets persist between launches
 
+## Install
+
+Download the DMG from [Releases](https://github.com/wezzcoetzee/metronome/releases) and drag Metronome to Applications.
+
+The app is not notarized, so the first launch shows "Apple could not verify Metronome". Click Done, then open System Settings, Privacy & Security, and click Open Anyway next to Metronome. Or clear the quarantine flag:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/Metronome.app
+```
+
 ## Use
 
 Start and stop playback in the main window. Use Tap to set the tempo, click a beat to toggle its accent, and click a preset to load it. The main window lists the first nine presets, numbered to match their shortcuts.
