@@ -76,6 +76,8 @@ To make a drag-to-Applications disk image, run `./scripts/dmg.sh 1.0.0`. Both sc
 
 ## Releases
 
+Pull requests and pushes to `main` run the tests (and `swift format lint` when a `.swift-format` config exists) through the [shared macOS CI workflow](https://github.com/wezzcoetzee/.github/blob/main/.github/workflows/macos-ci.yml).
+
 Push a version tag such as `v1.0.0` to build the app and publish `Metronome.dmg` in a GitHub release using the [shared macOS release workflow](https://github.com/wezzcoetzee/.github/blob/main/.github/workflows/macos-release.yml). The tag without its leading `v` supplies both bundle version fields. You can also run the macOS Release workflow manually against an existing tag.
 
 > [!NOTE]
