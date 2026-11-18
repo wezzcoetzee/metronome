@@ -16,12 +16,14 @@ struct SettingsView: View {
             row("Sound") {
                 HStack {
                     segmented("Sound", \.sound, Sound.allCases, label: \.name)
-                    Button { store.preview() } label: {
+                    Button {
+                        store.preview()
+                    } label: {
                         Image(systemName: "play.fill").frame(width: 24, height: 24).contentShape(Rectangle())
                     }
-                        .buttonStyle(.plain)
-                        .help("Preview")
-                        .accessibilityLabel("Preview sound")
+                    .buttonStyle(.plain)
+                    .help("Preview")
+                    .accessibilityLabel("Preview sound")
                 }
             }
             row("Time signature") {

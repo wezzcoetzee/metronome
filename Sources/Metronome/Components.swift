@@ -108,7 +108,9 @@ struct BeatDots: View {
         let columns = Array(repeating: GridItem(.fixed(size + 6), spacing: size * 0.5), count: min(store.settings.timeSignature.beats, 8))
         LazyVGrid(columns: columns, spacing: 4) {
             ForEach(Array(store.settings.barAccents.enumerated()), id: \.offset) { beat, accented in
-                Button { store.toggleAccent(beat) } label: {
+                Button {
+                    store.toggleAccent(beat)
+                } label: {
                     Circle()
                         .fill(accented ? .white : .clear)
                         .overlay(Circle().stroke(Color.dim))
@@ -137,7 +139,9 @@ struct PresetList: View {
         VStack(spacing: 0) {
             ForEach(Array(presets.prefix(9).enumerated()), id: \.element.id) { index, preset in
                 let active = store.settings.matches(preset)
-                Button { store.apply(preset) } label: {
+                Button {
+                    store.apply(preset)
+                } label: {
                     HStack {
                         Text("\(index + 1)").foregroundStyle(Color.dim).frame(width: 14, alignment: .leading)
                         Text(preset.displayName).lineLimit(1)

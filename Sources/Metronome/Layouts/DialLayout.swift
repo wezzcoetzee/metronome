@@ -27,11 +27,13 @@ struct DialLayout: View {
             }
             .frame(width: diameter, height: diameter)
             .contentShape(Circle())
-            .gesture(DragGesture(minimumDistance: 0).onChanged { drag in
-                // Only drags that start on the ring set tempo, so clicking the readout is harmless.
-                guard isOnRing(drag.startLocation) else { return }
-                setBPM(at: drag.location)
-            })
+            .gesture(
+                DragGesture(minimumDistance: 0).onChanged { drag in
+                    // Only drags that start on the ring set tempo, so clicking the readout is harmless.
+                    guard isOnRing(drag.startLocation) else { return }
+                    setBPM(at: drag.location)
+                }
+            )
             .overlay(ScrollSteps { store.nudge($0) })
             .tempoAccessibility(store)
 

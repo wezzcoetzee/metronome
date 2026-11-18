@@ -20,13 +20,15 @@ struct RulerLayout: View {
             ruler
                 .frame(height: 50)
                 .contentShape(Rectangle())
-                .gesture(DragGesture(minimumDistance: 1)
-                    .onChanged { drag in
-                        let start = dragStartBPM ?? settings.bpm
-                        dragStartBPM = start
-                        store.setBPM(start - Int((drag.translation.width / pointsPerBPM).rounded()))
-                    }
-                    .onEnded { _ in dragStartBPM = nil })
+                .gesture(
+                    DragGesture(minimumDistance: 1)
+                        .onChanged { drag in
+                            let start = dragStartBPM ?? settings.bpm
+                            dragStartBPM = start
+                            store.setBPM(start - Int((drag.translation.width / pointsPerBPM).rounded()))
+                        }
+                        .onEnded { _ in dragStartBPM = nil }
+                )
                 .overlay(ScrollSteps { store.nudge($0) })
                 .tempoAccessibility(store)
 

@@ -65,7 +65,8 @@ public enum SoundSynth {
                 value += recipe.noise * (recipe.highpassNoise ? white - previousNoise : white)
                 previousNoise = white
             }
-            let envelope = exp(-t / recipe.decay)
+            let envelope =
+                exp(-t / recipe.decay)
                 * min(1, Double(index) / attack)
                 * min(1, Double(count - index) / release)
             samples[index] = Float(value * envelope)
