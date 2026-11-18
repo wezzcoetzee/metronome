@@ -89,13 +89,14 @@ public final class MetronomeStore {
     public func saveCurrentAsPreset() {
         update {
             guard !$0.isSavedAsPreset else { return }
-            $0.presets.append(Preset(
-                name: "\($0.sound.name) \($0.meter)",
-                bpm: $0.bpm,
-                timeSignature: $0.timeSignature,
-                sound: $0.sound,
-                subdivision: $0.subdivision
-            ))
+            $0.presets.append(
+                Preset(
+                    name: "\($0.sound.name) \($0.meter)",
+                    bpm: $0.bpm,
+                    timeSignature: $0.timeSignature,
+                    sound: $0.sound,
+                    subdivision: $0.subdivision
+                ))
         }
     }
 

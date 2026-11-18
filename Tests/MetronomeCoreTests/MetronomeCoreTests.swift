@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+
 @testable import MetronomeCore
 
 @Suite struct TapTempoTests {
@@ -75,7 +76,8 @@ import Testing
     }
 
     @Test func decodingOlderDataKeepsPresetsAndDefaultsTheRest() throws {
-        let json = #"{"bpm": 90, "presets": [{"id": "9E1D5B6C-3C1A-4E8E-9F6B-1B2C3D4E5F60", "name": "Slow", "bpm": 60, "timeSignature": {"beats": 3, "noteValue": 4}, "sound": "beep"}]}"#
+        let json =
+            #"{"bpm": 90, "presets": [{"id": "9E1D5B6C-3C1A-4E8E-9F6B-1B2C3D4E5F60", "name": "Slow", "bpm": 60, "timeSignature": {"beats": 3, "noteValue": 4}, "sound": "beep"}]}"#
         let settings = try JSONDecoder().decode(MetronomeSettings.self, from: Data(json.utf8))
         #expect(settings.bpm == 90)
         #expect(settings.presets.map(\.name) == ["Slow"])

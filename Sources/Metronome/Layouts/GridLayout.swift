@@ -10,14 +10,17 @@ struct GridLayout: View {
         let accents = settings.barAccents
         let columns = min(accents.count, 8)
         // A signature set in Settings that isn't a quick pick still shows, selected, at the end.
-        let signatures = TimeSignature.quickPicks.contains(settings.timeSignature)
+        let signatures =
+            TimeSignature.quickPicks.contains(settings.timeSignature)
             ? TimeSignature.quickPicks
             : TimeSignature.quickPicks + [settings.timeSignature]
         VStack(spacing: 12) {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: columns), spacing: 8) {
                 ForEach(Array(accents.enumerated()), id: \.offset) { beat, accented in
                     let shape = RoundedRectangle(cornerRadius: 6)
-                    Button { store.toggleAccent(beat) } label: {
+                    Button {
+                        store.toggleAccent(beat)
+                    } label: {
                         shape
                             .fill(accented ? .white : .clear)
                             .overlay(shape.stroke(Color.outline))
@@ -48,7 +51,9 @@ struct GridLayout: View {
                 HStack(spacing: 0) {
                     ForEach(signatures, id: \.self) { signature in
                         let selected = signature == settings.timeSignature
-                        Button { store.setTimeSignature(signature) } label: {
+                        Button {
+                            store.setTimeSignature(signature)
+                        } label: {
                             Text(signature.description)
                                 .monospaced()
                                 .padding(.horizontal, 9)
