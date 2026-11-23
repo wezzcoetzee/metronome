@@ -1,16 +1,15 @@
 import Foundation
 
-/// The three voices a sound needs: accented downbeat, regular beat, and subdivision tick.
-public struct Voices: Sendable {
-    public var accent: [Float]
-    public var normal: [Float]
-    public var subdivision: [Float]
+struct Voices: Sendable {
+    var accent: [Float]
+    var normal: [Float]
+    var subdivision: [Float]
 
     static let silent = Voices(accent: [], normal: [], subdivision: [])
 }
 
 /// Synthesises every sound in code so the app ships without audio assets.
-public enum SoundSynth {
+enum SoundSynth {
     private enum Wave { case sine, square }
 
     private struct Recipe {
@@ -22,7 +21,7 @@ public enum SoundSynth {
         var decay: Double
     }
 
-    public static func voices(for sound: Sound, sampleRate: Double) -> Voices {
+    static func voices(for sound: Sound, sampleRate: Double) -> Voices {
         let recipe = recipe(for: sound)
         return Voices(
             accent: render(recipe, pitch: 1.5, gain: 1, sampleRate: sampleRate),

@@ -4,7 +4,7 @@ import os
 /// Counts frames on the audio thread and reports which tick starts on each frame.
 /// Ticks include subdivisions, so a 4/4 bar in eighths has 8 ticks.
 struct Sequencer {
-    private(set) var tick = 0
+    private var tick = 0
     private var framesUntilTick = 0.0
 
     mutating func reset() {
@@ -28,7 +28,7 @@ struct Sequencer {
 /// Sample-accurate metronome output. Timing is derived from the render callback's frame count,
 /// not from timers, so the click stays locked to the audio clock.
 public final class ClickEngine: @unchecked Sendable {
-    public struct Config: Equatable, Sendable {
+    public struct Config: Sendable {
         public var bpm: Int
         public var accents: [Bool]
         public var subdivision: Subdivision

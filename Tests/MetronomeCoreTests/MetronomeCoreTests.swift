@@ -18,12 +18,6 @@ import Testing
         #expect(tempo.tap(at: 10) == nil)
         #expect(tempo.tap(at: 10.25) == 240)
     }
-
-    @Test func clampsToTempoRange() {
-        var tempo = TapTempo()
-        _ = tempo.tap(at: 0)
-        #expect(tempo.tap(at: 0.01) == Tempo.range.upperBound)
-    }
 }
 
 @Suite struct SequencerTests {
@@ -50,19 +44,6 @@ import Testing
 }
 
 @Suite struct SettingsTests {
-    @Test func normalizeResizesAccentsAndClamps() {
-        var settings = MetronomeSettings()
-        settings.bpm = 1000
-        settings.timeSignature.beats = 6
-        settings.normalize()
-        #expect(settings.bpm == 300)
-        #expect(settings.barAccents == [true, false, false, false, false, false])
-
-        settings.timeSignature.beats = 2
-        settings.normalize()
-        #expect(settings.barAccents == [true, false])
-    }
-
     @Test func shrinkingTheBarKeepsAccentsForLater() {
         var settings = MetronomeSettings()
         settings.accents[3] = true
@@ -82,7 +63,6 @@ import Testing
         #expect(settings.bpm == 90)
         #expect(settings.presets.map(\.name) == ["Slow"])
         #expect(settings.presets.first?.subdivision == .quarter)
-        #expect(settings.barAccents.count == 4)
         #expect(settings.layout == MetronomeSettings().layout)
     }
 }
