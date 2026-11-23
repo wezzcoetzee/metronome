@@ -87,7 +87,6 @@ extension View {
         overlay { if sounding { shape.inset(by: -3).stroke(.white, lineWidth: 1.5) } }
     }
 
-    /// Exposes a custom tempo control (dial, ruler) to VoiceOver as an adjustable value.
     func tempoAccessibility(_ store: MetronomeStore) -> some View {
         accessibilityElement()
             .accessibilityLabel("Tempo")
@@ -98,8 +97,6 @@ extension View {
     }
 }
 
-/// One dot per beat, eight to a row: filled when accented, ringed while sounding.
-/// Click a dot to toggle its accent.
 struct BeatDots: View {
     @Environment(MetronomeStore.self) private var store
     var size: CGFloat = 12

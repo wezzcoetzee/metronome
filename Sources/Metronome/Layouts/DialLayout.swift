@@ -1,7 +1,6 @@
 import MetronomeCore
 import SwiftUI
 
-/// A 270° ring you drag or scroll, like the tempo knob on a hardware metronome.
 struct DialLayout: View {
     @Environment(MetronomeStore.self) private var store
 

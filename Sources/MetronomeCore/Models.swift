@@ -3,7 +3,7 @@ import Foundation
 public enum Tempo {
     public static let range = 30...300
 
-    public static func clamp(_ bpm: Int) -> Int {
+    static func clamp(_ bpm: Int) -> Int {
         min(max(bpm, range.lowerBound), range.upperBound)
     }
 
@@ -53,10 +53,8 @@ public enum Sound: String, Codable, CaseIterable, Identifiable, Sendable {
     }
 }
 
-public enum Subdivision: Int, Codable, CaseIterable, Identifiable, Sendable {
+public enum Subdivision: Int, Codable, CaseIterable, Sendable {
     case quarter = 1, eighth, triplet, sixteenth
-
-    public var id: Self { self }
 
     public var symbol: String {
         switch self {
@@ -67,7 +65,6 @@ public enum Subdivision: Int, Codable, CaseIterable, Identifiable, Sendable {
         }
     }
 
-    /// The time signature, plus this subdivision's symbol when it isn't plain quarter notes.
     public func meter(_ signature: TimeSignature) -> String {
         self == .quarter ? signature.description : "\(signature.description) \(symbol)"
     }
@@ -82,10 +79,8 @@ public enum Subdivision: Int, Codable, CaseIterable, Identifiable, Sendable {
     }
 }
 
-public enum MetronomeLayout: String, Codable, CaseIterable, Identifiable, Sendable {
+public enum MetronomeLayout: String, Codable, CaseIterable, Sendable {
     case dial, numeric, grid, ruler
-
-    public var id: Self { self }
 
     public var name: String {
         switch self {
@@ -97,7 +92,7 @@ public enum MetronomeLayout: String, Codable, CaseIterable, Identifiable, Sendab
     }
 }
 
-public struct Preset: Codable, Identifiable, Hashable, Sendable {
+public struct Preset: Codable, Identifiable, Equatable, Sendable {
     public var id = UUID()
     public var name: String
     public var bpm: Int
@@ -132,13 +127,11 @@ public struct Preset: Codable, Identifiable, Hashable, Sendable {
 
     public var meter: String { subdivision.meter(timeSignature) }
 
-    /// The name, or the tempo when the name has been cleared.
     public var displayName: String {
         name.trimmingCharacters(in: .whitespaces).isEmpty ? "\(bpm) BPM" : name
     }
 }
 
-/// Everything the user can configure. Persisted as a single JSON blob.
 public struct MetronomeSettings: Codable, Equatable, Sendable {
     public var bpm = 120
     public var timeSignature = TimeSignature.common
@@ -174,7 +167,6 @@ public struct MetronomeSettings: Codable, Equatable, Sendable {
         presets = value(.presets, defaults.presets)
     }
 
-    /// Keeps derived invariants intact after any edit.
     public mutating func normalize() {
         bpm = Tempo.clamp(bpm)
         timeSignature.beats = min(max(timeSignature.beats, TimeSignature.beatRange.lowerBound), TimeSignature.beatRange.upperBound)
@@ -186,7 +178,6 @@ public struct MetronomeSettings: Codable, Equatable, Sendable {
         }
     }
 
-    /// One entry per beat in the current bar.
     public var barAccents: [Bool] {
         Array(accents.prefix(timeSignature.beats))
     }

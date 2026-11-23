@@ -43,7 +43,6 @@ struct MetronomeView: View {
         .onKeyPress(phases: .down, action: handleKey)
     }
 
-    /// Shortcuts work in every layout: space, T, S, 1 to 9, and the arrow keys (shift for 5).
     private func handleKey(_ press: KeyPress) -> KeyPress.Result {
         let step = press.modifiers.contains(.shift) ? 5 : 1
         switch press.key {

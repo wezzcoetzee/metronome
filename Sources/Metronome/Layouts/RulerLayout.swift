@@ -1,7 +1,6 @@
 import MetronomeCore
 import SwiftUI
 
-/// A tempo scale you scrub horizontally.
 struct RulerLayout: View {
     @Environment(MetronomeStore.self) private var store
     @State private var dragStartBPM: Int?

@@ -85,7 +85,6 @@ public final class MetronomeStore {
         }
     }
 
-    /// Does nothing when an existing preset already matches, so repeated saves never stack duplicates.
     public func saveCurrentAsPreset() {
         update {
             guard !$0.isSavedAsPreset else { return }

@@ -1,7 +1,6 @@
 import MetronomeCore
 import SwiftUI
 
-/// The bar is the hero: one cell per beat, click a cell to toggle its accent.
 struct GridLayout: View {
     @Environment(MetronomeStore.self) private var store
 
